@@ -95,7 +95,7 @@ ${helpers.single_keyword("mask-mode",
                          products="gecko",
                          animatable=False,
                          spec="https://drafts.fxtf.org/css-masking/#propdef-mask-mode")}
-
+<%doc>
 // TODO implement all of repeat-style for background and mask
 // https://drafts.csswg.org/css-backgrounds-3/#repeat-style
 // ${helpers.single_keyword("mask-repeat",
@@ -105,7 +105,7 @@ ${helpers.single_keyword("mask-mode",
 //                          extra_prefixes="webkit",
 //                          animatable=False,
 //                          spec="https://drafts.fxtf.org/css-masking/#propdef-mask-repeat")}
-
+</%doc>
 <%helpers:vector_longhand name="mask-repeat" products="gecko",
                          extra_prefixes="webkit",
                          animatable="False",
@@ -141,7 +141,7 @@ ${helpers.single_keyword("mask-mode",
         RepeatY,
         2DRepeat(RepeatKeyword, Option<RepeatKeyword>)
     }
-    
+
     pub fn parse(_context: &ParserContext, input: &mut Parser) -> Result<SpecifiedValue, ()> {
         unimplemented!()
     }
