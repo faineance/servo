@@ -98,13 +98,54 @@ ${helpers.single_keyword("mask-mode",
 
 // TODO implement all of repeat-style for background and mask
 // https://drafts.csswg.org/css-backgrounds-3/#repeat-style
-${helpers.single_keyword("mask-repeat",
-                         "repeat repeat-x repeat-y space round no-repeat",
-                         vector=True,
-                         products="gecko",
+// ${helpers.single_keyword("mask-repeat",
+//                          "repeat repeat-x repeat-y space round no-repeat",
+//                          vector=True,
+//                          products="gecko",
+//                          extra_prefixes="webkit",
+//                          animatable=False,
+//                          spec="https://drafts.fxtf.org/css-masking/#propdef-mask-repeat")}
+
+<%helpers:vector_longhand name="mask-repeat" products="gecko",
                          extra_prefixes="webkit",
-                         animatable=False,
-                         spec="https://drafts.fxtf.org/css-masking/#propdef-mask-repeat")}
+                         animatable="False",
+                         spec="https://drafts.fxtf.org/css-masking/#propdef-mask-repeat")>
+    use std::fmt;
+    use style_traits::ToCss;
+    use values::HasViewportPercentage;
+
+    no_viewport_percentage!(SpecifiedValue);
+
+    pub mod computed_value {
+        pub use super::RepeatKeyword;
+        use values::computed;
+
+        #[derive(Debug, Clone, PartialEq)]
+        #[cfg_attr(feature = "servo", derive(HeapSizeOf))]
+        pub struct T(pub RepeatKeyword, pub RepeatKeyword);
+    }
+
+    #[derive(Debug, Clone, PartialEq)]
+    #[cfg_attr(feature = "servo", derive(HeapSizeOf))]
+    pub struct SpecifiedValue(pub RepeatKeyword,
+                              pub Option<RepeatKeyword>);
+
+    define_css_keyword_enum!(RepeatKeyword:
+                            "repeat" => Repeat,
+                            "space" => Space,
+                            "round" => Round,
+                            "no-repeat" => NoRepeat
+                            );
+    enum RepeatStyle {
+        RepeatX,
+        RepeatY,
+        2DRepeat(RepeatKeyword, Option<RepeatKeyword>)
+    }
+    
+    pub fn parse(_context: &ParserContext, input: &mut Parser) -> Result<SpecifiedValue, ()> {
+        unimplemented!()
+    }
+</%helpers:vector_longhand>
 
 <%helpers:vector_longhand name="mask-position-x" products="gecko" animatable="True" extra_prefixes="webkit"
                           spec="https://drafts.fxtf.org/css-masking/#propdef-mask-position">
