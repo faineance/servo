@@ -113,8 +113,15 @@ ${helpers.single_keyword("mask-mode",
     use std::fmt;
     use style_traits::ToCss;
     use values::HasViewportPercentage;
+    use values::computed::ComputedValueAsSpecified;
 
     no_viewport_percentage!(SpecifiedValue);
+    define_css_keyword_enum!(RepeatKeyword:
+                        "repeat" => Repeat,
+                        "space" => Space,
+                        "round" => Round,
+                        "no-repeat" => NoRepeat
+                        );
 
     pub mod computed_value {
         pub use super::RepeatKeyword;
@@ -122,20 +129,15 @@ ${helpers.single_keyword("mask-mode",
 
         #[derive(Debug, Clone, PartialEq)]
         #[cfg_attr(feature = "servo", derive(HeapSizeOf))]
-        pub struct T(pub RepeatKeyword, pub RepeatKeyword);
+        pub type T = super::SpecifiedValue;
+
     }
 
     #[derive(Debug, Clone, PartialEq)]
     #[cfg_attr(feature = "servo", derive(HeapSizeOf))]
     pub struct SpecifiedValue(pub RepeatKeyword,
                               pub Option<RepeatKeyword>);
-
-    define_css_keyword_enum!(RepeatKeyword:
-                            "repeat" => Repeat,
-                            "space" => Space,
-                            "round" => Round,
-                            "no-repeat" => NoRepeat
-                            );
+    impl ComputedValueAsSpecified for SpecifiedValue {}
     enum RepeatStyle {
         RepeatX,
         RepeatY,
