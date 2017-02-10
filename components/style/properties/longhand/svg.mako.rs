@@ -144,8 +144,22 @@ ${helpers.single_keyword("mask-mode",
         2DRepeat(RepeatKeyword, Option<RepeatKeyword>)
     }
 
+    impl ToCss for SpecifiedValue {
+        fn to_css<W>(&self, dest: &mut W) -> fmt::Result where W: fmt::Write {
+            try!(self.0.to_css(dest));
+            if let Some(second) = self.1 {
+                try!(dest.write_str(" "));
+                try!(second.to_css(dest));
+            }
+            Ok(())
+        }
+    }
+    
     pub fn parse(_context: &ParserContext, input: &mut Parser) -> Result<SpecifiedValue, ()> {
-        unimplemented!()
+        let first = try!(RepeatKeyword::parse(input));
+        let second = input.try(RepeatKeyword::parse).ok();
+
+        Ok(SpecifiedValue(first, second))
     }
 </%helpers:vector_longhand>
 
